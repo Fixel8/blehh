@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Countdown</title>
+  <style>
+    body {
+      font-family: monospace;
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 20vh;
+    }
+  </style>
+</head>
+<body>
+
+<div id="output">Loading...</div>
+
+<script>
+  const target = new Date(Date.UTC(2026, 0, 6, 9, 0, 0)); // Jan = 0
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = Math.floor((target - now) / 1000);
+
+    const output = document.getElementById("output");
+
+    if (diff <= 0) {
+      output.textContent = "Time's up!";
+      return;
+    }
+
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
+    const s = diff % 60;
+
+    output.textContent =
+      String(h).padStart(2, "0") + ":" +
+      String(m).padStart(2, "0") + ":" +
+      String(s).padStart(2, "0");
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
