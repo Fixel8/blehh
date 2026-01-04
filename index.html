@@ -4,17 +4,23 @@
 <div id="time"></div>
 <script>
 const end = Date.UTC(2026,0,6,9,0,0)
+const display = document.getElementById("time")
 
-setInterval(() => {
+const timer = setInterval(() => {
   const now = Date.now()
   let seconds = Math.floor((end - now) / 1000)
-  if (seconds < 0) seconds = 0
+
+  if (seconds <= 0) {
+    display.textContent = ":3"
+    clearInterval(timer)
+    return
+  }
 
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const secs = seconds % 60
 
-  document.getElementById("time").textContent =
+  display.textContent =
     hours + " " + minutes + " " + secs
 }, 1000)
 </script>
