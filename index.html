@@ -1,28 +1,101 @@
+      // vibecoded but whatya gonna do, I don't hide it :3 \\
 <!DOCTYPE html>
 <html>
-<body style="margin:0;background:black;color:white;display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;font-size:92px">
-<div id="time"></div>
-<script>
-const end = Date.UTC(2026,0,8,13,15,0)
-const display = document.getElementById("time")
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap');
 
-const timer = setInterval(() => {
-  const now = Date.now()
-  let seconds = Math.floor((end - now) / 1000)
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  if (seconds <= 0) {
-    display.textContent = "blehhh >w<"
-    clearInterval(timer)
-    return
+  body {
+    background: #0a0a0a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: 'JetBrains Mono', monospace;
   }
 
-  const hours = Math.floor(seconds / 3600)
-  const minutes = Math.floor((seconds % 3600) / 60)
-  const secs = seconds % 60
+  #timer {
+    font-size: 96px;
+    font-weight: 300;
+    letter-spacing: -2px;
+    color: #ffffff;
+  }
 
-  display.textContent =
-    hours + " " + minutes + " " + secs
-}, 1000)
+  #label {
+    font-size: 18px;
+    font-weight: 300;
+    color: #555;
+    text-align: center;
+    margin-top: 16px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  #end-message {
+    font-size: 72px;
+    font-weight: 300;
+    display: none;
+  }
+
+  .wrapper {
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div id="timer"></div>
+  <div id="label"></div>
+  <div id="end-message"></div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIGURATION — edit section:3
+  // ============================================================
+  const LABEL = "I'll see you in"
+
+  // year, months indexed since 0 (january=0) days hour minutes seconds
+  const TARGET = Date.UTC(2026, 0, 8, 13, 15, 0)
+
+  const END_MESSAGE = "VERY SOON !!! YESSS"
+
+  // text
+  const LABEL = "test123"
+
+  // ============================================================
+
+  const timerEl = document.getElementById("timer")
+  const labelEl = document.getElementById("label")
+  const endEl = document.getElementById("end-message")
+
+  labelEl.textContent = LABEL
+
+  const tick = () => {
+    const diff = Math.floor((TARGET - Date.now()) / 1000)
+
+    if (diff <= 0) {
+      timerEl.style.display = "none"
+      labelEl.style.display = "none"
+      endEl.style.display = "block"
+      endEl.textContent = END_MESSAGE
+      clearInterval(interval)
+      return
+    }
+
+    const h = Math.floor(diff / 3600)
+    const m = Math.floor((diff % 3600) / 60)
+    const s = diff % 60
+
+    timerEl.textContent = `${h}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`
+  }
+
+  tick()
+  const interval = setInterval(tick, 1000)
 </script>
 </body>
 </html>
