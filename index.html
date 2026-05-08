@@ -11,90 +11,136 @@
     background: #0a0a0a;
     color: #fff;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
+    gap: 60px;
     font-family: 'JetBrains Mono', monospace;
+    padding: 40px;
   }
 
-  #timer {
-    font-size: 96px;
+  .timer-block { text-align: center; }
+
+  .timer-display {
+    font-size: 80px;
     font-weight: 300;
     letter-spacing: -2px;
     color: #ffffff;
   }
 
-  #label {
-    font-size: 18px;
+  .timer-label {
+    font-size: 14px;
     font-weight: 300;
     color: #555;
-    text-align: center;
-    margin-top: 16px;
+    margin-top: 10px;
     letter-spacing: 4px;
     text-transform: uppercase;
   }
 
-  #end-message {
-    font-size: 72px;
+  .timer-end {
+    font-size: 60px;
     font-weight: 300;
     display: none;
   }
 
-  .wrapper {
+  .text-block {
     text-align: center;
+    font-size: 18px;
+    font-weight: 300;
+    color: #888;
+    letter-spacing: 2px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .divider {
+    width: 1px;
+    height: 40px;
+    background: #222;
   }
 </style>
 </head>
 <body>
-<div class="wrapper">
-  <div id="timer"></div>
-  <div id="label"></div>
-  <div id="end-message"></div>
-</div>
-
 <script>
   // ============================================================
-  // CONFIGURATION — edit section:3
-  // ============================================================
-  const LABEL = "I'll see you in"
-
-  // year, months indexed since 0 (january=0) days hour minutes seconds
-  const TARGET = Date.UTC(2026, 0, 8, 13, 15, 0)
-
-  const END_MESSAGE = "VERY SOON !!! YESSS"
-
-  // text
-  const LABEL = "test123"
-
+  // CONFIGURATION — edit freely :3
   // ============================================================
 
-  const timerEl = document.getElementById("timer")
-  const labelEl = document.getElementById("label")
-  const endEl = document.getElementById("end-message")
+  const ITEMS = [
 
-  labelEl.textContent = LABEL
+    {type: "text",content: "fixel page thingy meow"},
 
-  const tick = () => {
-    const diff = Math.floor((TARGET - Date.now()) / 1000)
+    {type: "timer",target: Date.UTC(2026, 4, 15, 18, 0, 0),label: "until I see you",endMessage: "I'LL SEE YOU VERY SOON"},
 
-    if (diff <= 0) {
-      timerEl.style.display = "none"
-      labelEl.style.display = "none"
-      endEl.style.display = "block"
-      endEl.textContent = END_MESSAGE
-      clearInterval(interval)
-      return
+    {type: "text",content: ""},
+
+    {type: "text",content: ""},
+
+    type: "timer",target: Date.UTC(2034, 6, 6, 0, 0, 0),label: "until HOMEA",endMessage: "been so long, happy livin' happy life",daysOnly: true},
+
+  ]
+
+  // ============================================================
+  const body = document.body
+
+  ITEMS.forEach((item, index) => {
+    if (item.type === "text") {
+      const el = document.createElement("div")
+      el.className = "text-block"
+      el.textContent = item.content
+      body.appendChild(el)
+
+    } else if (item.type === "timer") {
+      const block = document.createElement("div")
+      block.className = "timer-block"
+
+      const display = document.createElement("div")
+      display.className = "timer-display"
+
+      const label = document.createElement("div")
+      label.className = "timer-label"
+      if (item.label) label.textContent = item.label
+
+      const endMsg = document.createElement("div")
+      endMsg.className = "timer-end"
+
+      block.appendChild(display)
+      if (item.label) block.appendChild(label)
+      block.appendChild(endMsg)
+      body.appendChild(block)
+
+      const tick = () => {
+        const diff = Math.floor((item.target - Date.now()) / 1000)
+        if (diff <= 0) {
+          display.style.display = "none"
+          label.style.display = "none"
+          endMsg.style.display = "block"
+          endMsg.textContent = item.endMessage || ":3"
+          clearInterval(interval)
+          return
+        }
+        if (item.daysOnly) {
+          const days = Math.ceil(diff / 86400)
+          display.textContent = `${days}d`
+        } else {
+          const h = Math.floor(diff / 3600)
+          const m = Math.floor((diff % 3600) / 60)
+          const s = diff % 60
+          display.textContent = `${h}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`
+        }
+      }
+
+      tick()
+      const interval = item.daysOnly ? setInterval(tick, 60000) : setInterval(tick, 1000)
     }
 
-    const h = Math.floor(diff / 3600)
-    const m = Math.floor((diff % 3600) / 60)
-    const s = diff % 60
-
-    timerEl.textContent = `${h}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`
-  }
-
-  tick()
-  const interval = setInterval(tick, 1000)
+    if (index < ITEMS.length - 1) {
+      const div = document.createElement("div")
+      div.className = "divider"
+      body.appendChild(div)
+    }
+  })
 </script>
 </body>
 </html>
