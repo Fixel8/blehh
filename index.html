@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: #0a0a0a;
     color: #fff;
@@ -15,28 +13,14 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    gap: 40px;
     font-family: 'JetBrains Mono', monospace;
-    padding: 40px;
   }
-
-  .text-block {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 300;
-    color: #888;
-    letter-spacing: 2px;
-  }
-
-  .timer-block { text-align: center; }
-
   .timer-display {
     font-size: 80px;
     font-weight: 300;
     letter-spacing: -2px;
     color: #ffffff;
   }
-
   .timer-label {
     font-size: 14px;
     font-weight: 300;
@@ -44,8 +28,8 @@
     margin-top: 10px;
     letter-spacing: 4px;
     text-transform: uppercase;
+    text-align: center;
   }
-
   .timer-end {
     font-size: 48px;
     font-weight: 300;
@@ -55,68 +39,25 @@
 </style>
 </head>
 <body>
-
-<!-- fixel page thingy meow :3 -->
-<div class="text-block">fixel page thingy meow :3</div>
-
-<!-- until I see you -->
-<div class="timer-block">
-  <div class="timer-display" id="timer1"></div>
-  <div class="timer-label">until I see you</div>
-  <div class="timer-end" id="end1">soon :3</div>
-</div>
-
-<!-- space -->
-<div></div>
-<div></div>
-
-<!-- until HOME -->
-<div class="timer-block">
-  <div class="timer-display" id="timer2"></div>
-  <div class="timer-label">until HOME!!!!!!!!!!</div>
-  <div class="timer-end" id="end2">been so long, happy livin</div>
-</div>
-
+<div class="timer-display" id="timer"></div>
+<div class="timer-label">until HOME!!!!!!!!!!</div>
+<div class="timer-end" id="end">been so long, happy livin</div>
 <script>
-  // TIMER 1
-  const target1 = Date.UTC(2026, 4, 19, 10, 54, 30)
-  const t1 = document.getElementById("timer1")
-  const e1 = document.getElementById("end1")
-
-  const tick1 = () => {
-    const diff = Math.floor((target1 - Date.now()) / 1000)
+  const target = Date.UTC(2034, 6, 6, 0, 0, 0)
+  const t = document.getElementById("timer")
+  const e = document.getElementById("end")
+  const tick = () => {
+    const diff = Math.floor((target - Date.now()) / 1000)
     if (diff <= 0) {
-      t1.style.display = "none"
-      e1.style.display = "block"
-      clearInterval(i1)
+      t.style.display = "none"
+      e.style.display = "block"
+      clearInterval(i)
       return
     }
-    const h = Math.floor(diff / 3600)
-    const m = Math.floor((diff % 3600) / 60)
-    const s = diff % 60
-    t1.textContent = `${h}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`
+    t.textContent = `${Math.ceil(diff / 86400)}d`
   }
-  tick1()
-  const i1 = setInterval(tick1, 1000)
-
-  // TIMER 2
-  const target2 = Date.UTC(2034, 6, 6, 0, 0, 0)
-  const t2 = document.getElementById("timer2")
-  const e2 = document.getElementById("end2")
-
-  const tick2 = () => {
-    const diff = Math.floor((target2 - Date.now()) / 1000)
-    if (diff <= 0) {
-      t2.style.display = "none"
-      e2.style.display = "block"
-      clearInterval(i2)
-      return
-    }
-    t2.textContent = `${Math.ceil(diff / 86400)}d`
-  }
-  tick2()
-  const i2 = setInterval(tick2, 60000)
+  tick()
+  const i = setInterval(tick, 60000)
 </script>
-
 </body>
 </html>
